@@ -1,0 +1,18 @@
+div#header{
+}
+
+div#header-logo{
+
+}
+
+div#header-search{
+}
+div#header-signin{
+	float: right;
+}
+button#signin{
+	background-color: red;
+	color: white;
+	border-color: transparent;
+
+}
