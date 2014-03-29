@@ -45,7 +45,7 @@ session_start();
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Upload</a></li>
+            <li><a href="uploadmedia.php">Upload</a></li>
             <li><a href="#">Profile</a></li>
           </ul>
           <form class="navbar-form navbar-right">
