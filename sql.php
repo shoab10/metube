@@ -5,6 +5,10 @@ function sql_connect()
 {
 	global $dbhost,$dbuser,$dbpass,$database;
 	$con=mysqli_connect($dbhost,$dbuser,$dbpass,$database);
+	if(!$con)
+		{
+			die('could not connect'.mysql_error());
+		}
 	return $con;
 }
 
