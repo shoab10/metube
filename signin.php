@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
   $check = user_pass_check($_POST['username'],$_POST['password']); // Call functions from function.php
       if($check == 1) {
-        $login_error = "User ".$_POST['username']." not found.";
+        $login_error = "Invalid Username";
         //echo "$login_error";
         $username="";
       }
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
         $_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
         
-        header('Location: home.php');
+        header('Location: homex.php');
       }
 }
 ?>
@@ -58,7 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
+      <a class="navbar-brand" href="/metube/home.php">MeTube</a>
+      <!--<img src="/metube/images/metube_logo.jpg" class="img-responsive" alt="Responsive image">-->
+      <!--<div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -79,37 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             <input type="text" class="form-control" placeholder="Search...">
           </form>
         </div>
-      </div>
+      </div>-->
     </div>
-
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview</a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
-        </div>
       
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"> <!--Body Container-->
       <div class="container">
-
-      <form class="form-signin" role="form" action="signin.php" method="POST">
+      <form class="form-signin " role="form" action="signin.php" method="POST">
         <h2 class="form-signin-heading">Sign In</h2>
         <input type="username" class="form-control" placeholder="Username" required autofocus name="username" value="<?php echo $username;?>">
         <input type="password" class="form-control" placeholder="Password" required name="password">
@@ -117,7 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
           <input type="checkbox" value="remember-me"> Remember me
         </label>
         <button class="btn btn-primary btn-lg" type="submit">Sign in</button>
-        <p><?php echo $login_error; ?></p>
+        <a class="btn btn-link btn-lg" href="/metube/register.php" role="button">Register</a>
+
+        <p class="text-danger"><?php echo $login_error; ?></p>
       </form>
       </div> <!-- /container -->
 
