@@ -41,7 +41,7 @@ session_start();
             <span class="icon-bar"></span>
             
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="/metube/homex.php">MeTube - All Media.One Source</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">

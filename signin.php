@@ -1,6 +1,8 @@
 <?php
+session_start();
 $username="";
 $login_error="";
+
 include "function.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -20,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         echo "Success";
 
         $_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
-        
         header('Location: homex.php');
       }
 }
@@ -58,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <a class="navbar-brand" href="/metube/home.php">MeTube</a>
+      <a class="navbar-brand" href="/metube/home.php">MeTube - All Media.One Source</a>
       <!--<img src="/metube/images/metube_logo.jpg" class="img-responsive" alt="Responsive image">-->
       <!--<div class="container-fluid">
         <div class="navbar-header">
