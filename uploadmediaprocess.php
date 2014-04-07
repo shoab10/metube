@@ -7,7 +7,6 @@ include_once "sql.php";
 * upload document from user
 *
 *******************************************************/
-sql_connect();
 $username=$_SESSION['username'];
 $title=$_POST['title'];
 $keywoards=$_POST['keywoards'];
@@ -28,7 +27,7 @@ if(!file_exists($dirfile))
 	  $upfile = $dirfile.urlencode($_FILES["file"]["name"]);
 	  
 	  if(file_exists($upfile))
-	  {
+	 {
 	  		$result="5"; //The file has been uploaded.
 	  }
 	  else{
@@ -42,12 +41,18 @@ if(!file_exists($dirfile))
 				{
 					//insert into media table
 					$insert = "insert into media(
-							  mediaid, title, keywoards, filepath, username)".
-							  "values(NULL, '$title', '$keywoards','$dirfile','$username')";
-					$queryresult = sql_query($insert)
+							  mediaid, filename, type, title, keywoards, filepath, username)".
+							  "values(NULL, '". urlencode($_FILES["file"]["name"])."', '".$_FILES["file"]["type"]."', '$title', '$keywoards','$dirfile','$username')";
+					$queryresult = mysql_query($insert)
 						  or die("Insert into Media error in media_upload_process.php " .mysql_error());
 					$result="0";
 					
+
+					$mediaid = mysql_insert_id();
+					//insert into upload table
+					$insertUpload="insert into upload(uploadid,username,mediaid) values(NULL,'$username','$mediaid')";
+					$queryresult = mysql_query($insertUpload)
+						  or die("Insert into view error in media_upload_process.php " .mysql_error());
 				
 				}
 			}

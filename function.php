@@ -5,14 +5,14 @@ function register($username,$password,$email)
 {
 	$query="insert into account (username,password,email) values ('$username','$password','$email')";
 	//echo $query;
-	$a=sql_query($query);
+	$a=mysql_query($query);
 
 }
 
 function checkUserNameExists($username)
 {
 	$query="select username from account where username='$username'";
-	$result=sql_query($query);
+	$result=mysql_query($query);
 	return $result;
 }
 
@@ -39,8 +39,8 @@ function upload_error($result)
 function user_pass_check($username,$password)
 {
 	$query = "select * from account where username='$username'";
-	$result = sql_query( $query );
-	$row=mysqli_fetch_row($result);
+	$result = mysql_query( $query );
+	$row=mysql_fetch_row($result);
 	if(!$row)
 	{
 		return 1;
