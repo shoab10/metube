@@ -21,7 +21,7 @@ $username=$_SESSION['username'];
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
-    <link href="/metube/css/signin.css" rel="stylesheet">
+    <!--<link href="/metube/css/signin.css" rel="stylesheet"> -->
     <link href="/metube/css/dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
@@ -64,8 +64,9 @@ xmlhttp.send();
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+            <li><a href="profile.php">Hello,<?php echo get_firstname($username); ?></a></li>
             <li><a href="uploadmedia.php">Upload</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><a href="signout.php">Sign out</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
@@ -79,10 +80,13 @@ xmlhttp.send();
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">profile</a></li>
-            <li><a href="#">favourites</a></li>
-            <li><button type="button" onclick="playlistfunc()">playlists</button></li>
-            <li><a href="#">metube channels</a></li>
+            <li class="active"><a href="homex.php">Home</a></li>
+            <li><a href="profile.php">Profile</a></li>
+            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
+            <li><a href="mymedia.php">My Media</a></li>
+            <li><a href="messages.php">Messages</a></li>
+            <li><a href="channels.php">Channels</a></li>
+            <li><a href="playlists.php">Playlists</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li><a href="">Nav item</a></li>
@@ -91,50 +95,31 @@ xmlhttp.send();
             <li><a href="">Another nav item</a></li>
             <li><a href="">More navigation</a></li>
           </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-      
-      <?php
-
-
-  $query = "SELECT * from media"; 
-  $result = mysql_query( $query );
-  if (!$result)
-  {
-     die ("Could not query the media table in the database: <br />". mysql_error());
-  }
-?>
-    
-    <div style="background:#339900;color:#FFFFFF; width:150px;">Uploaded Media</div>
-  <table width="50%" cellpadding="0" cellspacing="0">
-    <?php
-      while ($result_row = mysql_fetch_row($result))
-      { 
-    ?>
-        <tr valign="top">     
-      <td>
-          <?php 
-            echo $result_row[0];
-          ?>
-      </td>
-            <td>
-              <a href="media1.php?id=<?php echo $result_row[0];?>"><?php echo $result_row[1];?></a> 
-            </td>
-            <td>
-              <a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a>
-            </td>
-    </tr>
+        <h1 class="page-header">Your Media</h1>
+        <div class="row placeholders">
         <?php
-      }
-    ?>
-
-      
+        $query = "SELECT * from media"; 
+        $result = mysql_query( $query );
+        if (!$result)
+        {
+          die ("Could not query the media table in the database: <br />". mysql_error());
+        }
+        while ($result_row = mysql_fetch_row($result))
+        {
+          ?>
+          
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
+              <h4><a href="media1.php?id=<?php echo $result_row[0];?>"><?php echo $result_row[1];?></a></h4>
+              <span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>
+            </div>
+        <?php
+        }
+        ?>
+      </div>    
       </div> <!-- /container -->
 
 

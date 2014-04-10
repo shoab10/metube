@@ -59,3 +59,11 @@ function user_pass_check($username,$password)
 			return 0; //Checked.
 	}
 }
+
+function get_firstname($username)
+{
+	$query = "select * from account where username='$username'";
+	$result = mysql_query( $query );
+	$row=mysql_fetch_row($result);
+	return $row[4];
+}
