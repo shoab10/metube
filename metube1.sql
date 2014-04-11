@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 07, 2014 at 03:07 PM
+-- Generation Time: Apr 11, 2014 at 03:52 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `account` (
   `username` varchar(10) NOT NULL,
   `password` varchar(10) NOT NULL,
   `email` varchar(20) NOT NULL,
+  `firstname` text NOT NULL,
+  `lastname` text NOT NULL,
   PRIMARY KEY (`accid`),
   UNIQUE KEY `accid` (`accid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
@@ -41,10 +43,9 @@ CREATE TABLE IF NOT EXISTS `account` (
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`accid`, `username`, `password`, `email`) VALUES
-(6, 'shoab101', '123456', 'shoab10@gmail.com'),
-(7, 'shoab10', '12345669', 'shoab@clemson.edu'),
-(9, 'haseeb101', '123456', 'ahaseeb@clemson.edu');
+INSERT INTO `account` (`accid`, `username`, `password`, `email`, `firstname`, `lastname`) VALUES
+(6, 'shoab101', '123456', 'shoab10@gmail.com', 'Shoab', 'Ahmed'),
+(9, 'haseeb101', '123456', 'ahaseeb@clemson.edu', 'Haseeb', 'Abdul');
 
 -- --------------------------------------------------------
 
@@ -64,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `likes` (
 --
 
 INSERT INTO `likes` (`mediaid`, `likeno`, `views`) VALUES
-(3, 0, 0),
-(8, 6, 2);
+(3, 0, 2),
+(8, 6, 11);
 
 -- --------------------------------------------------------
 
@@ -93,6 +94,29 @@ INSERT INTO `media` (`mediaid`, `filename`, `type`, `title`, `keywoards`, `filep
 (4, 'Video1.WMV', 'video/x-ms-wmv', 'kk', 'kk', 'uploads/shoab101/', 'shoab101'),
 (7, 'Video1.WMV', 'video/x-ms-wmv', 'kk', 'kk', 'uploads/shoab101/', 'shoab101'),
 (8, 'Video1.WMV', 'video/x-ms-wmv', 'kk', 'nn', 'uploads/shoab101/', 'shoab101');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE IF NOT EXISTS `messages` (
+  `msgid` int(11) NOT NULL AUTO_INCREMENT,
+  `sender` varchar(10) NOT NULL,
+  `receiver` varchar(10) NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `message` text NOT NULL,
+  PRIMARY KEY (`msgid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`msgid`, `sender`, `receiver`, `time`, `message`) VALUES
+(1, 'shoab101', 'haseeb101', '2014-04-08 21:32:46', 'hello world'),
+(2, 'haseeb101', 'shoab101', '2014-04-08 21:48:20', 'hey dude ssup');
 
 -- --------------------------------------------------------
 
