@@ -3,6 +3,29 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
+
+if(isset($_POST['freq']))
+{
+  $fusername=$_POST['fusername'];
+  $freq=$_POST['freq'];
+  if($freq=='accept')
+  {
+    $query="insert into friendlist (username,fusername,status) values('$username','$fusername',1)";
+    $result=mysql_query($query);
+    $query="insert into friendlist (username,fusername,status) values('$fusername','$username',1)";
+    $result=mysql_query($query);
+    $query = "DELETE from friendrequest where username='$fusername' and fusername='$username' and status=0";
+    $result=mysql_query($query);
+  }
+  else if($freq=='decline')
+  {
+    $query = "DELETE from friendrequest where username='$fusername' and fusername='$username' and status=0";
+    $result=mysql_query($query);
+  }
+}
+
+
+
  ?>
 <!DOCTYPE html>
 
@@ -32,37 +55,10 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-function playlistfunc()
-{
-
-var xmlhttp=new XMLHttpRequest();
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","allplaylist.php",true);
-xmlhttp.send();
-}
-</script>
-
-<style type="text/css"> 
-#panel
-{
-display:none;
-}
-</style>
-
-
-
   </head>
 
   <body>
-    <div class="navbar  navbar-fixed-top" role="navigation">
-
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -79,14 +75,9 @@ display:none;
             <li><a href="uploadmedia.php">Upload</a></li>
             <li><a href="signout.php">Sign out</a></li>
           </ul>
-
-          <form class="navbar-form navbar-left" role="search">
-            <div class="form-group" >
-              <input type="text" class="form-control" placeholder="Videos,images.." style="width:360px;">
-            </div>
-            <button type="submit" class="btn btn-default" style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
-          </form>     
-          
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
         </div>
       </div>
     </div>
@@ -98,52 +89,85 @@ display:none;
           <ul class="nav nav-sidebar">
             <li class="active"><a href="homex.php">Home</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
-            <li><a href="friends.php">Friends</a></li>
             <li><a href="channels.php">Channels</a></li>
             <li><a href="playlists.php">Playlists</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="">Categories</a></li>
-            <li><a href="">Music</a></li>
-            <li><a href="">Sports</a></li>
-            <li><a href="">Education</a></li>
-            <li><a href="">Movies</a></li></span>
+            <li><a href="">Nav item</a></li>
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+            <li><a href="">More navigation</a></li>
           </ul>
-
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-        <h1 class="page-header">Your Media</h1>
-        <div class="row placeholders">
+        <h1 class="page-header">Friend Requests</h1>
+        <div id="table">
+          <table class="table">
         <?php
-        $query = "SELECT * from media"; 
+        $query = "SELECT username from friendrequest where fusername='$username'"; 
+        $result = mysql_query( $query );
+        if (!$result)
+        {
+          die ("Could not query the database: <br />". mysql_error());
+        }
+        while ($result_row = mysql_fetch_array($result,MYSQL_ASSOC))
+        {
+          ?>
+          
+          <tr>
+            <td><form action="friends.php" method="post"><h3><?php echo $result_row['username'];?> 
+              <button class="btn btn-success" type="submit" name="freq" value="accept">Accept</button>
+              <button class="btn btn-danger" type="submit" name="freq" value="decline">Decline</button>
+              <input type="hidden" value="<?php echo $result_row['username'];?>" name="fusername">
+            </form>
+            </h3> 
+          </td>
+          </tr>
+
+        <?php
+        }
+        ?>
+      </table>
+    </div>
+
+    <h1 class="page-header">Friends</h1>
+    <div class="row placeholders">
+        <?php
+        $query = "SELECT fusername from friendlist where username='$username'"; 
         $result = mysql_query( $query );
         if (!$result)
         {
           die ("Could not query the media table in the database: <br />". mysql_error());
         }
-        while ($result_row = mysql_fetch_row($result))
+        while ($result_row = mysql_fetch_assoc($result))
         {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
-              <h4><a href="media1.php?id=<?php echo $result_row[0];?>"><?php echo $result_row[1];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>
+
+        ?>
+        <div class="col-xs-6 col-sm-3 placeholder">
+              <!--<img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">-->
+              <h4><a href="user.php?username=<?php echo $result_row['fusername'];?>"><?php echo $result_row['fusername'];?></a></h4>
+              <!--<span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>-->
             </div>
         <?php
         }
         ?>
       </div>
 
-    </div> <!-- /container -->
+
+      </div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+});
+
+});
+
+</script>
   </body>
 </html>

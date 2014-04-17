@@ -3,7 +3,45 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
+
+$query = "SELECT * from friendlist where username='$username' and fusername='$_GET[username]' and status=1";
+$result = mysql_query( $query );
+$flag=0;
+if(mysql_num_rows($result))
+{
+  $flag=1;
+}
+else
+{
+  $flag=0;
+}
+
+$query = "SELECT * from friendrequest where username='$username' and fusername='$_GET[username]' and status=0";
+$result = mysql_query( $query );
+if(mysql_num_rows($result))
+{
+  $flag=2;
+}
+
+
+$query = "SELECT * from account where username='$_GET[username]'"; 
+$result = mysql_query( $query );
+if(!$result)
+{
+  die ("Could not query the media table in the database: <br />". mysql_error());
+}
+while ($result_row = mysql_fetch_assoc($result))
+{
+  $uname=$result_row['username'];
+  $firstname=$result_row['firstname'];
+  $lastname=$result_row['lastname'];
+  $email=$result_row['email'];
+  //$dob=$result_row['dob'];
+  //$sex=$result_row['sex'];
+  //$about=$result_row['about'];
+}
  ?>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -32,37 +70,10 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-function playlistfunc()
-{
-
-var xmlhttp=new XMLHttpRequest();
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","allplaylist.php",true);
-xmlhttp.send();
-}
-</script>
-
-<style type="text/css"> 
-#panel
-{
-display:none;
-}
-</style>
-
-
-
   </head>
 
   <body>
-    <div class="navbar  navbar-fixed-top" role="navigation">
-
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -79,14 +90,9 @@ display:none;
             <li><a href="uploadmedia.php">Upload</a></li>
             <li><a href="signout.php">Sign out</a></li>
           </ul>
-
-          <form class="navbar-form navbar-left" role="search">
-            <div class="form-group" >
-              <input type="text" class="form-control" placeholder="Videos,images.." style="width:360px;">
-            </div>
-            <button type="submit" class="btn btn-default" style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
-          </form>     
-          
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
         </div>
       </div>
     </div>
@@ -101,49 +107,61 @@ display:none;
             <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
-            <li><a href="friends.php">Friends</a></li>
             <li><a href="channels.php">Channels</a></li>
             <li><a href="playlists.php">Playlists</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="">Categories</a></li>
-            <li><a href="">Music</a></li>
-            <li><a href="">Sports</a></li>
-            <li><a href="">Education</a></li>
-            <li><a href="">Movies</a></li></span>
+            <li><a href="">Nav item</a></li>
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+            <li><a href="">More navigation</a></li>
           </ul>
-
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-        <h1 class="page-header">Your Media</h1>
-        <div class="row placeholders">
-        <?php
-        $query = "SELECT * from media"; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
-        }
-        while ($result_row = mysql_fetch_row($result))
-        {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
-              <h4><a href="media1.php?id=<?php echo $result_row[0];?>"><?php echo $result_row[1];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>
-            </div>
-        <?php
-        }
-        ?>
-      </div>
-
-    </div> <!-- /container -->
+        <h1 class="page-header"><?php echo $firstname; echo" "; echo $lastname?></h1>
+        <span id="Fbutton"><button class="btn btn-primary" id="Fbutton">Request Friend</button></span>
+        <button class="btn btn-default">Message</button>
+        
+        <h3 align="left">Username : <small><?php echo $uname; ?></small></h3>
+        <h3 align="left">Email : <small><?php echo $email; ?></small></h3>
+        <h3 align="left">Date of Birth : <small><?php echo $email; ?></small></h3>
+        <h3 align="left">Sex : <small><?php echo $email; ?></small></h3>
+        <h3 align="left">About : <small><?php echo $email; ?></small></h3>
+      </div>    
+      
+      </div> <!-- /container -->
+    </div>
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+      if(<?php echo $flag; ?> == 1)
+      {
+        $('#Fbutton').html('<button type="button" class="btn btn-info btn-primary" disabled="disabled">Friend  <span class="glyphicon glyphicon-ok"></span></button>');
+      }
+      else if (<?php echo $flag; ?> == 2) 
+      {
+        $('#Fbutton').html('<button type="button" class="btn btn-info btn-success" disabled="disabled">Friend Requested</button>');
+      };
+
+      $("#Fbutton").click(function() 
+      {
+        $('#Fbutton').html('<button class="btn btn-success" id="Fbutton" disabled="disabled">Request Sent!</button>');
+        
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.open("GET","sendfriendrequest.php?username=<?php echo $username;?>&fusername=<?php echo $_GET['username'];?>",true);
+        xmlhttp.send();
+
+      });
+    });
+    </script>
+
   </body>
 </html>

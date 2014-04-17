@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 11, 2014 at 03:52 AM
+-- Generation Time: Apr 17, 2014 at 04:34 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -35,6 +35,9 @@ CREATE TABLE IF NOT EXISTS `account` (
   `email` varchar(20) NOT NULL,
   `firstname` text NOT NULL,
   `lastname` text NOT NULL,
+  `sex` varchar(1) NOT NULL,
+  `dob` date NOT NULL,
+  `about` text NOT NULL,
   PRIMARY KEY (`accid`),
   UNIQUE KEY `accid` (`accid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
@@ -43,9 +46,45 @@ CREATE TABLE IF NOT EXISTS `account` (
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`accid`, `username`, `password`, `email`, `firstname`, `lastname`) VALUES
-(6, 'shoab101', '123456', 'shoab10@gmail.com', 'Shoab', 'Ahmed'),
-(9, 'haseeb101', '123456', 'ahaseeb@clemson.edu', 'Haseeb', 'Abdul');
+INSERT INTO `account` (`accid`, `username`, `password`, `email`, `firstname`, `lastname`, `sex`, `dob`, `about`) VALUES
+(6, 'shoab101', '123456', 'shoab10@gmail.com', 'Shoab', 'Ahmed', 'M', '1991-03-25', 'Hey ! Winter is Coming.!'),
+(9, 'haseeb101', '123456', 'ahaseeb@clemson.edu', 'Haseeb', 'Abdul', '', '0000-00-00', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `friendlist`
+--
+
+CREATE TABLE IF NOT EXISTS `friendlist` (
+  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(10) NOT NULL,
+  `fusername` varchar(10) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`fid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `friendlist`
+--
+
+INSERT INTO `friendlist` (`fid`, `username`, `fusername`, `status`) VALUES
+(11, 'haseeb101', 'shoab101', 1),
+(12, 'shoab101', 'haseeb101', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `friendrequest`
+--
+
+CREATE TABLE IF NOT EXISTS `friendrequest` (
+  `frid` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(10) NOT NULL,
+  `fusername` varchar(10) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`frid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
@@ -65,8 +104,8 @@ CREATE TABLE IF NOT EXISTS `likes` (
 --
 
 INSERT INTO `likes` (`mediaid`, `likeno`, `views`) VALUES
-(3, 0, 2),
-(8, 6, 11);
+(3, 0, 4),
+(8, 6, 12);
 
 -- --------------------------------------------------------
 

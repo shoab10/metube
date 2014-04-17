@@ -102,15 +102,15 @@ xmlhttp.send();
       	<form role="form" method="post" action="uploadmediaprocess.php" enctype="multipart/form-data" >
     		<div class="form-group">
     			<label for="uploadTitle">Title</label>
-    			<input type="text" class="form-control" name="title" required>
+    			<input type="text" class="form-control" name="title" required style="width:40%">
     		</div>
     		<div class="form-group">
     			<label for="uploadDescription">Description</label>
-    			<input type="textarea" class="form-control" name="description">
+    			<textarea  class="form-control" name="description" rows="4" cols="25" style="width:50%"></textarea>
     		</div>
     		<div class="form-group">
     			<label for="uploadDescription">Keywords</label>
-    			<input type="text" class="form-control" name="keywords" required>
+    			<input type="text" class="form-control" name="keywords" required style="width:30%">
     		</div>
     		<div class="form-group">
     			<label for="uploadFile">File input</label>

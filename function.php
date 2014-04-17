@@ -65,5 +65,14 @@ function get_firstname($username)
 	$query = "select * from account where username='$username'";
 	$result = mysql_query( $query );
 	$row=mysql_fetch_row($result);
-	return $row[4];
+	$name=$row[4];
+	return $name;
+}
+function get_name($username)
+{
+	$query = "select * from account where username='$username'";
+	$result = mysql_query( $query );
+	$row=mysql_fetch_row($result);
+	$name=$row[4]." ".$row[5];
+	return $name;
 }
