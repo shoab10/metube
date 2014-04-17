@@ -36,9 +36,9 @@ while ($result_row = mysql_fetch_assoc($result))
   $firstname=$result_row['firstname'];
   $lastname=$result_row['lastname'];
   $email=$result_row['email'];
-  //$dob=$result_row['dob'];
-  //$sex=$result_row['sex'];
-  //$about=$result_row['about'];
+  $dob=$result_row['dob'];
+  $sex=$result_row['sex'];
+  $about=$result_row['about'];
 }
  ?>
 
@@ -126,9 +126,9 @@ while ($result_row = mysql_fetch_assoc($result))
         
         <h3 align="left">Username : <small><?php echo $uname; ?></small></h3>
         <h3 align="left">Email : <small><?php echo $email; ?></small></h3>
-        <h3 align="left">Date of Birth : <small><?php echo $email; ?></small></h3>
-        <h3 align="left">Sex : <small><?php echo $email; ?></small></h3>
-        <h3 align="left">About : <small><?php echo $email; ?></small></h3>
+        <h3 align="left">Date of Birth : <small><?php echo $dob; ?></small></h3>
+        <h3 align="left">Sex : <small><?php echo $sex; ?></small></h3>
+        <h3 align="left">About : <small><?php echo $about; ?></small></h3>
       </div>    
       
       </div> <!-- /container -->

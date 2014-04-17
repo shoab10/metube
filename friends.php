@@ -149,7 +149,7 @@ if(isset($_POST['freq']))
         ?>
         <div class="col-xs-6 col-sm-3 placeholder">
               <!--<img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">-->
-              <h4><a href="user.php?username=<?php echo $result_row['fusername'];?>"><?php echo $result_row['fusername'];?></a></h4>
+              <h4><a href="user.php?username=<?php echo $result_row['fusername'];?>"><?php echo get_name($result_row['fusername']);?></a></h4>
               <!--<span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>-->
             </div>
         <?php

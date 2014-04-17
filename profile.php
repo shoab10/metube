@@ -96,7 +96,6 @@ while ($result_row = mysql_fetch_assoc($result))
           <ul class="nav nav-sidebar">
             <li class="active"><a href="homex.php">Home</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
             <li><a href="friends.php">Friends</a></li>
@@ -124,19 +123,19 @@ while ($result_row = mysql_fetch_assoc($result))
         </span> 
 
         <span id="updateform" style="display:none;">
-          <form role="form">
+          <form role="form" method="post" action="updateprofile.php">
             <div class="form-group">
               <label for="firstname">Firstname</label>
-              <input type="text" class="form-control" id="firstname" value="<?php echo $firstname;?>">
+              <input type="text" class="form-control" name="firstname" value="<?php echo $firstname;?>">
               <label for="lastname">Lastname</label>
-              <input type="text" class="form-control" id="lastname" value="<?php echo $lastname;?>">
+              <input type="text" class="form-control" name="lastname" value="<?php echo $lastname;?>">
               <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" value="<?php echo $email;?>">
+              <input type="email" class="form-control" name="email" value="<?php echo $email;?>">
               <label for="dob">Date of Birth</label>
-              <input type="text" class="form-control" id="dob" value="<?php echo $dob;?>">
+              <input type="text" class="form-control" name="dob" value="<?php echo $dob;?>">
               <label for="about">About</label>
-              <textarea class="form-control" id="about"><?php echo $about;?></textarea>
-              <button class="btn btn-primary" type="submit" id="btn-update">Update</button>
+              <textarea class="form-control" name="about"><?php echo $about;?></textarea>
+              <button class="btn btn-primary" type="submit" id="btnupdate">Update</button>
             </div>
         </form>
       </span>
@@ -155,7 +154,7 @@ while ($result_row = mysql_fetch_assoc($result))
       $("#profile").hide();
       $("#updateform").show();
       });
-      });
+    });
      </script>
   </body>
 </html>
