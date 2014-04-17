@@ -32,22 +32,7 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-function playlistfunc()
-{
-
-var xmlhttp=new XMLHttpRequest();
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","allplaylist.php",true);
-xmlhttp.send();
-}
-</script>
+    
 
 <style type="text/css"> 
 #panel
@@ -98,7 +83,7 @@ display:none;
           <ul class="nav nav-sidebar">
             <li class="active"><a href="homex.php">Home</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
+            <li><a href="allplaylist.php">playlists</li>
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
             <li><a href="friends.php">Friends</a></li>
