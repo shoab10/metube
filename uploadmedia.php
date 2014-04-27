@@ -112,6 +112,11 @@ xmlhttp.send();
     			<label for="uploadDescription">Keywords</label>
     			<input type="text" class="form-control" name="keywords" required style="width:30%">
     		</div>
+        <div class="form-group">
+          <label for="uploadFile">Thumbnail</label>
+          <input type="file" id="uploadFile">
+        <p class="help-block">Choose thumbnail</p>
+        </div>
     		<div class="form-group">
     			<label for="uploadFile">File input</label>
     			<input type="file" id="uploadFile">

@@ -19,9 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
       }
       else if($check==0){
 
-        echo "Success";
-
+        $username=$_POST['username'];
         $_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
+
+        $query = "select accid,username from account where username='$username'";
+        $result = mysql_query( $query );
+        $row=mysql_fetch_assoc($result);
+        $_SESSION['accid']=$row['accid']; //Set the $_SESSION['accid']
+
+
         header('Location: homex.php');
       }
 }
