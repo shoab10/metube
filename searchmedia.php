@@ -6,6 +6,7 @@ $username=$_SESSION['username'];
  ?>
 <!DOCTYPE html>
 
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -65,9 +66,9 @@ display:none;
             <li><a href="signout.php">Sign out</a></li>
           </ul>
 
-          <form class="navbar-form navbar-left" role="search" method=get action="searchmedia.php">
+          <form class="navbar-form navbar-left" role="search">
             <div class="form-group" >
-              <input type="text" class="form-control" name="search" placeholder="Videos,images.." style="width:360px;">
+              <input type="text" class="form-control" placeholder="Videos,images.." style="width:360px;">
             </div>
             <button type="submit" class="btn btn-default" style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
           </form>     
@@ -104,26 +105,48 @@ display:none;
         <h1 class="page-header">Your Media</h1>
         <div class="row placeholders">
         <?php
+        $types = array();
 
+     if (isset($_GET['search'])) {
+          $search=$_GET['search'];
+         $s1 = str_replace("'", '', $search);
+         $s2 = preg_replace('/[^a-zA-Z0-9" "\']/', '', $s1);
+         $s2 = preg_replace( "/\s+/", " ", $s2 );
+         $sTerms = strip_tags($s2);
+    $searchTermDB = mysql_real_escape_string($sTerms);
+    $types=explode(" ", $searchTermDB);
+    foreach ($types as &$value)
+   $value = " `keywoard` LIKE '%{$value}%' ";
+        
 
+        $searchSQL = "SELECT * FROM `media` NATURAL JOIN `keywoards` WHERE";
+        
 
-        $query = "SELECT * from media"; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
+        $searchSQL .= implode(" OR ", $types) . " limit 0,10";
+        $searchResult = mysql_query($searchSQL) or trigger_error("Error!<br/>" . mysql_error() . "<br />SQL Was: {$searchSQL}");
+
+      if (mysql_num_rows($searchResult) < 1) {
+			$error[] = "No Results";
+die ("Could not query the media table in the database: <br />". mysql_error());
         }
-        while ($result_row = mysql_fetch_row($result))
-        {
+        else {
+
+			while ($result_row = mysql_fetch_assoc($searchResult)) {
+				$kid = $result_row['kid'];
+				$c = $result_row['counter'];
+				$c = $c + 1;
+				mysql_query("Update `Keywords` set `counter`= '$c'  WHERE `kid`='$kid'");
           ?>
           
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
-              <h4><a href="media1.php?id=<?php echo $result_row[0];?>"><?php echo $result_row[1];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row[0];?>);">Download</a></span>
+              <h4><a href="media1.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['filename'];?></a></h4>
+              <span class="text-muted"><a href="<?php // echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
             </div>
         <?php
         }
+    }
+}
         ?>
       </div>
 
