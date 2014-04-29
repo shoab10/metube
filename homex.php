@@ -91,17 +91,17 @@ display:none;
             <button type="submit" class="btn btn-default"  style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
             <div class="radio">
               <label>
-            <input type="radio" name="search" value="title"> Title
+            <input type="radio" name="search1" value="title"> Title
               </label>
             </div>
             <div class="radio">
               <label>
-            <input type="radio" name="search" value="keyword"> Keywords
+            <input type="radio" name="search1" value="keyword" checked> Keywords
               </label>
             </div>
             <div class="radio">
               <label>
-            <input type="radio" name="search" value="category"> Category
+            <input type="radio" name="search1" value="category"> Category
               </label>
             </div>
           </form>
