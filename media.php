@@ -191,6 +191,19 @@ else
 xmlhttp.open("GET","addtofavouritelist.php?mediaid=<?php echo $mediaid;?>",true);
 xmlhttp.send();
 }
+
+
+function saveDownload(id)
+{
+  window.location.href = "<?php echo $filepath.$filename;?>";
+  $.post("media_download_process.php",
+  {
+       id: id,
+  },
+  function(message) 
+    { }
+  ); 
+} 
 </script>
 
 
@@ -283,6 +296,8 @@ LIMIT 0 , 30";
       			
             <button class="btn btn-info" onClick= 'addtoplaylist()'><span id="plist">Add to Playlist<span></button>   
              <button class="btn btn-success" onClick= 'addtofavourites()'><span id="fav">favourite<span></button>
+             <!--<button class="btn btn-success" onClick= 'saveDownload()'><span id="fav">Download<span></button>-->
+             <a href="<?php echo $filepath.$filename;?>"  onclick="javascript:saveDownload(<?php echo $mediaid;?>);">Download</a>
             <?php
 $query="SELECT * 
 FROM  `playlists` 

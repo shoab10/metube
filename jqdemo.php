@@ -75,7 +75,7 @@ $(document).ready(function() {
 </head>
 <body>
     <h1>jQCloud Example</h1>
-    <div id="wordcloud" style="width: 200px; height: 300px; position: relative;"></div>
+    <div id="wordcloud" style="width: 350px; height: 350px; position: relative;"></div>
  
 
 </body>
