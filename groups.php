@@ -3,7 +3,7 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
-$accid=$_SESSION['accid'];
+//$accid=$_SESSION['accid'];
  ?>
 <!DOCTYPE html>
 
@@ -52,7 +52,7 @@ xmlhttp.onreadystatechange=function()
      document.getElementById("displaygroups").innerHTML=xmlhttp.responseText;
     }
   }
-xmlhttp.open("GET","creategroup.php?gname="+str,true);
+xmlhttp.open("GET","creategroupbackend.php?gname="+str,true);
 xmlhttp.send();
 }
 
@@ -121,7 +121,7 @@ xmlhttp.send();
           <div class="form-group">
           <label class="sr-only" for="creategroup">Create Group</label>
           <input type="text" class="form-control" id="creategroup" placeholder="Group name" name="groupname">
-          <button type="button" class="btn btn-default">Create</button>
+          <button type="button" class="btn btn-default" onClick="creategroup()">Create</button>
           </div>
         
         <h1 class="page-header" style="padding-top:10px">My Groups</h1>
@@ -130,7 +130,7 @@ xmlhttp.send();
         <?php
         $query="SELECT * FROM groups where username = '$username'";
         $result=mysql_query($query);
-        if(mysql_num_rows($result)>0)
+        if(mysql_num_rows($result))
         {
         while($row=mysql_fetch_assoc($result))
         {

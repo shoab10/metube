@@ -3,7 +3,6 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
-$accid=$_SESSION['accid'];
 $gid=$_SESSION['gid'];
 
 $fname=$_GET['fname'];
