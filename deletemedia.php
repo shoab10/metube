@@ -3,6 +3,9 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
+
+
+
  ?>
 <!DOCTYPE html>
 
@@ -32,28 +35,22 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    
 
-    <script type="text/javascript">
-function delete_media(id)
+<style type="text/css"> 
+#panel
 {
-  $.post("deletemedia.php",
-  {
-       id: id,
-  },
-  function(message) 
-    { }
-  );
-} 
-</script>
-  
- 
-  
+display:none;
+}
+</style>
+
+
 
   </head>
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <body onload="checksession()">
+    <div class="navbar  navbar-fixed-top" role="navigation">
+
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -70,9 +67,14 @@ function delete_media(id)
             <li><a href="uploadmedia.php">Upload</a></li>
             <li><a href="signout.php">Sign out</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
+
+          <form class="navbar-form navbar-left" role="search" method=get action="searchmedia.php">
+            <div class="form-group" >
+              <input type="text" class="form-control" name="search" placeholder="Videos,images.." style="width:360px;">
+            </div>
+            <button type="submit" class="btn btn-default"  style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
+          </form>     
+          
         </div>
       </div>
     </div>
@@ -80,56 +82,43 @@ function delete_media(id)
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="homex.php">Home</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
+            <li><a href="allplaylist.php">playlists</li>
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
+            <li><a href="friends.php">Friends</a></li>
             <li><a href="channels.php">Channels</a></li>
             <li><a href="playlists.php">Playlists</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
+            <li class="active"><a href="">Categories</a></li>
+            <li><a href="">Music</a></li>
+            <li><a href="">Sports</a></li>
+            <li><a href="">Education</a></li>
+            <li><a href="">Movies</a></li></span>
           </ul>
+
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-        <h1 class="page-header">My Media</h1>
-        <div class="row placeholders">
-        <?php
-        $query = "SELECT * from media where username='$username'"; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
-        }
-        while ($result_row = mysql_fetch_assoc($result))
-        {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" alt="Image" width="200px" height="200px">
-              <h4><a href="media1.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="editmedia.php?id=<?php echo $result_row['mediaid'];?>"">Edit </a><a href="deletemedia.php?id=<?php echo $result_row['mediaid'];?>">Delete</a></span>
-            
-            </div>
-        <?php
-        }
-        ?>
-      </div>    
-      </div> <!-- /container -->
+      	<h2>Do you want to delete file?</h2>
+      	<form action="deletemediaprocess.php" method="POST">
+      		<input type="hidden" value="<?php echo $_GET['id']; ?>" name="id">
+      		<button type="submit">YES</button>
+      		<button><a href="mymedia.php">NO</a></button>
+      		
+      	</form>
+        
 
+    </div> <!-- /container -->
+</div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     
   </body>
 </html>
