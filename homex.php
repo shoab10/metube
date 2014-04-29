@@ -2,7 +2,18 @@
 session_start();
 include_once "function.php";
 include_once "sql.php";
-$username=$_SESSION['username'];
+if(!isset($_SESSION['username']))
+{
+  $firstname="Guest";
+}
+else
+{
+ $username=$_SESSION['username'];
+ $firstname=get_firstname($username);
+}
+
+
+
 
 
  ?>
@@ -34,9 +45,15 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
     
 
 <style type="text/css"> 
+#img-pic:hover
+{
+  opacity:0.5;
+}
+
 #panel
 {
 display:none;
@@ -47,8 +64,8 @@ display:none;
 
   </head>
 
-  <body onload="checksession()">
-    <div class="navbar  navbar-fixed-top" role="navigation">
+  <body>
+    <div class="navbar  navbar-fixed-top" role="navigation" style="background:white">
 
       <div class="container-fluid">
         <div class="navbar-header">
@@ -58,21 +75,38 @@ display:none;
             <span class="icon-bar"></span>
             
           </button>
-          <a class="navbar-brand" href="/metube/homex.php">MeTube - All Media.One Source</a>
+          <a class="navbar-brand" href="/metube/homex.php">MeTube</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="profile.php">Hello,<?php echo get_firstname($username); ?></a></li>
-            <li><a href="uploadmedia.php">Upload</a></li>
+            <li><a href="profile.php">Hello,<?php echo $firstname; ?></a></li>
+            <li ><a href="uploadmedia.php" id="upload">Upload</a></li>
             <li><a href="signout.php">Sign out</a></li>
           </ul>
 
-          <form class="navbar-form navbar-left" role="search" method=get action="searchmedia.php">
+          <form class="navbar-form navbar-left" role="search" method=get action="searchmedia.php" style="position:relative;left:100px">
             <div class="form-group" >
               <input type="text" class="form-control" name="search" placeholder="Videos,images.." style="width:360px;">
             </div>
             <button type="submit" class="btn btn-default"  style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
-          </form>     
+            <div class="radio">
+              <label>
+            <input type="radio" name="search" value="title"> Title
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+            <input type="radio" name="search" value="keyword"> Keywords
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+            <input type="radio" name="search" value="category"> Category
+              </label>
+            </div>
+          </form>
+          <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="javascript:wordcloud()">Word Cloud</button>
+
           
         </div>
       </div>
@@ -103,7 +137,7 @@ display:none;
 
         </div>
       
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe" > <!--Body Container-->
         <h1 class="page-header">Most Viewed</h1>
         <div class="row placeholders">
         <?php
@@ -120,8 +154,8 @@ display:none;
         {
           ?>
           
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
+            <div class="col-xs-6 col-sm-3 placeholder" id="img-pic">
+              <img src="<?php echo $result_row['thumbnailpath'];?>" alt="Image" width="200px" height="200px" >
               <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
               <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
             </div>
@@ -146,10 +180,10 @@ display:none;
         {
           ?>
           
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
+            <div class="col-xs-6 col-sm-3 placeholder" id="img-pic">
+              <img src="<?php echo $result_row['thumbnailpath'];?>"  alt="Image" width="200px" height="200px" >
               <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
+              <!--<span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>-->
             </div>
         <?php
         }
@@ -159,15 +193,21 @@ display:none;
     </div> <!-- /container -->
 
 
-    <!-- Bootstrap core JavaScript
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script><!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript">
-    function checksession()
+    function wordcloud()
     {
-      if(!<?php if(isset($_SESSION['u'])) echo 1; else echo 0; ?>)
-      //document.getElementById("sidebar").style.display="none";
+      window.location.href = "jqdemo.php";
     }
+    
+      if(!<?php if(isset($_SESSION['username'])) echo 1; else echo 0; ?>)
+      {//document.getElementById("sidebar").style.display="none";
+        //document.getElementById("upload").disabled=true;
+
+      }
     </script>
   </body>
 </html>

@@ -2,7 +2,6 @@
 session_start();
 include_once "function.php";
 include_once "sql.php";
-$username=$_SESSION['username'];
  ?>
 <html>
 <head>
@@ -10,7 +9,6 @@ $username=$_SESSION['username'];
 <script type="text/javascript" src="js/jqCloud.js"> </script>
 <link rel="stylesheet" type="text/css" href="css/jqCloud.css"/>
 
-hhhhhhhhhhhhhhjjkkk1
 <?php
     $kterms = array();
     $fterms = array();
@@ -19,11 +17,11 @@ hhhhhhhhhhhhhhjjkkk1
     $max = 0;
     $i=0;
 
-    $query = mysql_query("SELECT DISTINCT (`keywoard`), `counter` FROM  `keywoards` ORDER BY counter DESC LIMIT 50");
+    $query = mysql_query("SELECT DISTINCT (`keyword`), `counter` FROM  `keywords` ORDER BY counter DESC LIMIT 50");
 
     while ($result_row = mysql_fetch_assoc($query))
     {
-      $term = $result_row['keywoard'];
+      $term = $result_row['keyword'];
       $counter = $result_row['counter'];
       if ($counter > $max) 
         {
@@ -77,7 +75,7 @@ $(document).ready(function() {
 </head>
 <body>
     <h1>jQCloud Example</h1>
-    <div id="wordcloud" style="width: 550px; height: 350px; position: relative;"></div>
+    <div id="wordcloud" style="width: 200px; height: 300px; position: relative;"></div>
  
 
 </body>
