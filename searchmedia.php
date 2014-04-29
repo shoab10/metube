@@ -107,41 +107,86 @@ display:none;
         <?php
         $types = array();
 
-     if (isset($_GET['search'])) {
+     if (isset($_GET['search']))
+     {
           $search=$_GET['search'];
           $search1=$_GET['search1'];
          $s1 = str_replace("'", '', $search);
          $s2 = preg_replace('/[^a-zA-Z0-9" "\']/', '', $s1);
          $s2 = preg_replace( "/\s+/", " ", $s2 );
          $sTerms = strip_tags($s2);
-    $searchTermDB = mysql_real_escape_string($sTerms);
-    $types=explode(" ", $searchTermDB);
+         $searchTermDB = mysql_real_escape_string($sTerms);
+          $types=explode(" ", $searchTermDB);
 
     if($search1 == "keyword")
-    {
-    foreach ($types as &$value)
-   $value = " `keyword` LIKE '%{$value}%' ";
-        
+       {
+       foreach ($types as &$value)
+        $value = " `keyword` LIKE '%{$value}%' ";
+         
 
         $searchSQL = "SELECT * FROM `media` NATURAL JOIN `keywords` WHERE permission ='public' and ";
         
 
         $searchSQL .= implode(" OR ", $types) . " limit 0,10";
         $searchResult = mysql_query($searchSQL) or trigger_error("Error!<br/>" . mysql_error() . "<br />SQL Was: {$searchSQL}");
-}
+        if (mysql_num_rows($searchResult) < 1) 
+             {
+                   $error[] = "No Results";
+                    die ("Could not find the media in the database: <br />". mysql_error());
+             }
+        else {
 
-else if($search1 == "title") {
-  foreach ($types as &$value)
-  $value = " `title` LIKE '%{$value}%' ";
-        
+      while ($result_row = mysql_fetch_assoc($searchResult)) 
+                {
+        $kid = $result_row['kid'];
+        $c = $result_row['counter'];
+        $c = $c + 1;
+        mysql_query("Update `Keywords` set `counter`= '$c'  WHERE `kid`='$kid'");
+          ?>
+          
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
+              <h4><a href="media1.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['filename'];?></a></h4>
+              <span class="text-muted"><a href="<?php // echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
+            </div>
 
-        $searchSQL = "SELECT * FROM `media` WHERE permission ='public' and";
+
+  <?php
+              }
+           }
+       }       
+           else if($search1 == "title") 
+    {
+           foreach ($types as &$value)
+            $value = " `title` LIKE '%{$value}%' ";
+           
+           $searchSQL = "SELECT * FROM `media` WHERE permission ='public' and";
         
 
         $searchSQL .= implode(" OR ", $types) . " limit 0,10";
         $searchResult = mysql_query($searchSQL) or trigger_error("Error!<br/>" . mysql_error() . "<br />SQL Was: {$searchSQL}");
+        if (mysql_num_rows($searchResult) < 1) 
+          {
+           $error[] = "No Results";
+           die ("Could not find the media in the database: <br />". mysql_error());
+          }
+        else 
+        {
 
-}
+      while ($result_row = mysql_fetch_assoc($searchResult)) 
+           {
+          ?>
+          
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
+              <h4><a href="media1.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['filename'];?></a></h4>
+              <span class="text-muted"><a href="<?php // echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
+            </div>
+        <?php
+        }
+    }
+
+   }
      else 
 
      {
@@ -154,24 +199,17 @@ else if($search1 == "title") {
 
         $searchSQL .= implode(" OR ", $types) . " limit 0,10";
         $searchResult = mysql_query($searchSQL) or trigger_error("Error!<br/>" . mysql_error() . "<br />SQL Was: {$searchSQL}");
-
-
-
-
-     }
-
-      if (mysql_num_rows($searchResult) < 1) {
-			$error[] = "No Results";
-die ("Could not query the media table in the database: <br />". mysql_error());
+        if (mysql_num_rows($searchResult) < 1) 
+        {
+                $error[] = "No Results";
+              die ("Could not find the media in the database: <br />". mysql_error());
         }
-        else if($search1 == "keyword") {
+        else {
 
-			while ($result_row = mysql_fetch_assoc($searchResult)) {
-				$kid = $result_row['kid'];
-				$c = $result_row['counter'];
-				$c = $c + 1;
-				mysql_query("Update `Keywords` set `counter`= '$c'  WHERE `kid`='$kid'");
+      while ($result_row = mysql_fetch_assoc($searchResult)) 
+                          {
           ?>
+
           
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
@@ -179,11 +217,16 @@ die ("Could not query the media table in the database: <br />". mysql_error());
               <span class="text-muted"><a href="<?php // echo $result_row[2].$result_row[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
             </div>
         <?php
-        }
-    }
-  }
+                       }
+               }
+
+
+
+
+     }
 }
-        ?>
+
+            ?>
       </div>
 
     </div> <!-- /container -->
