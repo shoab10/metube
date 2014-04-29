@@ -32,7 +32,27 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+    <script>
+function createplaylist()
+{
+
+var xmlhttp=new XMLHttpRequest();
+ var results=document.getElementById("txt").value;
+str = String(results);
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      
+
+     document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","createplaylistbackend.php?pname="+str,true);
+xmlhttp.send();
+}
+
+</script> 
   </head>
 
   <body>
@@ -60,104 +80,60 @@ $username=$_SESSION['username'];
     </div>
 
 
-    <div class="container-fluid">
+     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">profile</a></li>
-            <li><a href="#">favourites</a></li>
-            <li><a href="allplaylist.php">playlists</a></li>
-            <li><a href="#">metube channels</a></li>
+            <li class="active"><a href="homex.php">Home</a></li>
+            <li><a href="profile.php">Profile</a></li>
+            <li><a href="allplaylist.php">playlists</li>
+            <li><a href="mymedia.php">My Media</a></li>
+            <li><a href="messages.php">Messages</a></li>
+            <li><a href="friends.php">Friends</a></li>
+           <li><a href="channel.php?channelname=<?php echo $username;?>" >MY Channel</a></li>
+            <li><a href="subscribtions.php">subscribtions</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
+            <li class="active"><a href="">Categories</a></li>
+            <li><a href="">Music</a></li>
+            <li><a href="">Sports</a></li>
+            <li><a href="">Education</a></li>
+            <li><a href="">Movies</a></li></span>
           </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
+
         </div>
       
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"> <!--Body Container-->
       
-  <?php
+  
+
+  <p> create new playlist</p>
+  name:<input type="text" name="txt" id="txt"/>
+  <button type="button" onclick="createplaylist()">create playlist</button> 
+
+    <p> My playlists: </p>
+    <div id="mainframe"> <?php
 
  
 $query = "SELECT * FROM playlists WHERE username= '$username'";
   $result = mysql_query( $query ) or die("Insert into Media error in media_upload_process.php " .mysql_error());
 
+  while ($result_row = mysql_fetch_assoc($result))
+      { 
+      ?>
+            <h4><a href="displayplaylist.php?pid=<?php echo $result_row['pid'];?>"> <?php echo $result_row['pname'];?></a></h4>
+
+            <?php
+}
   ?>
 
-<!--   <script>
-function createplaylist(str)
-{
-
-var xmlhttp=new XMLHttpRequest();
-var value=document.getElementById("str").value;
-
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-      <?php 
-
-        //  $insertplaylist="insert into playlists(pid,pname,username) values(NULL,"?>value<?php//",'$username')";
-          //mysql_query($insertplaylist) or die("Insert into Media error in media_upload_process.php " .mysql_error());
-
-
-      ?>
-   // document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","allplaylist.php?username="+<?php// echo $username ?>,true);
-xmlhttp.send();
-}
-
-</script> -->
 
   
 hellllllllllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooo
   
-    <?php
-      while ($result_row = mysql_fetch_row($result))
-      { 
-            echo $result_row[1];
-
-        $query1 = "SELECT * FROM media WHERE mediaid = ALL (SELECT mediaid FROM  `playlistmedia` WHERE pid = $result_row[0]) "; 
-        $result1 = mysql_query( $query1 );
-        if ($result1)
-        {
-        while ($result_row1 = mysql_fetch_row($result1))
-        {
-          ?>
-           <br>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="\metube\images\metube_logo.jpg" class="img-responsive" alt="Image">
-              <h4><a href="media1.php?id=<?php echo $result_row1[0];?>"><?php echo $result_row1[1];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row1[2].$result_row1[1];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row1[0];?>);">Download</a></span>
-            </div>
-            <br>
-        <?php
-        }}
-        ?>
-      
-    
-        <?php
-      }
-    ?>
-
-  <p> create new playlist</p>
-  name:<input type="text" name="txt" id="txt"/>
-  <!--<button type="button" onclick="createplaylist('txt')">create</button> 
-
--->
-
-      
+  
+</div>
+  
       </div> <!-- /container -->
 
 

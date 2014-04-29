@@ -33,6 +33,30 @@ $accid=$_SESSION['accid'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+
+
+    <script>
+function creategroup()
+{
+
+var xmlhttp=new XMLHttpRequest();
+ var results=document.getElementById("creategroup").value;
+str = String(results);
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      
+
+     document.getElementById("displaygroups").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","creategroup.php?gname="+str,true);
+xmlhttp.send();
+}
+
+</script> 
   </head>
 
   <body>
@@ -93,14 +117,16 @@ $accid=$_SESSION['accid'];
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
         
         <h1 class="page-header">Groups</h1>
-        <form class="form-inline" role="form" method="post" action="creategroup.php">
+        
           <div class="form-group">
           <label class="sr-only" for="creategroup">Create Group</label>
           <input type="text" class="form-control" id="creategroup" placeholder="Group name" name="groupname">
-          <button type="submit" class="btn btn-default">Create</button>
+          <button type="button" class="btn btn-default">Create</button>
           </div>
-        </form>
+        
         <h1 class="page-header" style="padding-top:10px">My Groups</h1>
+       
+<div id="displaygroups">
         <?php
         $query="SELECT * FROM groups where username = '$username'";
         $result=mysql_query($query);
@@ -114,7 +140,7 @@ $accid=$_SESSION['accid'];
         }}
          ?>
 
-        
+        <div>
 
 
 

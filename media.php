@@ -6,6 +6,7 @@ $username=$_SESSION['username'];
 
 if(isset($_GET['id'])) {
   $query = "SELECT * FROM media WHERE mediaid='".$_GET['id']."'";
+  $mediaid = $_GET['id'];
   $result = mysql_query( $query );
   $result_row = mysql_fetch_assoc($result);
   $filename=$result_row['filename'];
@@ -116,6 +117,80 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open("GET","mediarating.php?mid=<?php echo $mid;?>&rid="+str,true);
 xmlhttp.send();
 }   //media rating fn ends here
+
+function addsubscribtion()
+{
+  
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("list1").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","subscribe.php?uploader=<?php echo $uploader;?>&subscriber=<?php echo $username;?>",true);
+xmlhttp.send();
+}
+
+
+function addtoplaylist()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  var results=document.getElementById("list").value;
+ // document.getElementById("listresult").innerHTML = results;
+ str = parseInt(results);
+  xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("plist").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","addmediatolist.php?mediaid=<?php echo $mediaid;?>&pid="+str,true);
+xmlhttp.send();
+}
+
+function addtofavourites()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  var results=document.getElementById("list").value;
+ // document.getElementById("listresult").innerHTML = results;
+ str = parseInt(results);
+  xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("fav").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","addtofavouritelist.php?mediaid=<?php echo $mediaid;?>",true);
+xmlhttp.send();
+}
 </script>
 
 
@@ -189,6 +264,12 @@ xmlhttp.send();
 
             </div>
       		</div>
+        <?php  $query="SELECT * 
+FROM  `playlists` 
+WHERE username =  '$username'
+LIMIT 0 , 30";
+  $plist = mysql_query($query) or die ("Failed to load friends");
+  ?>
       		<div class="row"> <!--box below video-->
       			<div class="col-md-12">
       				<h3><?php echo $title;?></h3>
@@ -198,8 +279,30 @@ xmlhttp.send();
       		<div class="row">
       			<div class="col-md-6">
       			<p>Uploaded by <span style="font-weight:bold;font-size:120%;"><a href=""><?php echo $uploader;?></a></span></p>
-      			<button class="btn btn-danger">Subscribe</button>
-      			<button class="btn btn-info">Add to Playlist</button>      			
+      			<button class="btn btn-danger" onClick="addsubscribtion()" id="btn-subscribe">Subscribe</button>
+      			
+            <button class="btn btn-info" onClick= 'addtoplaylist()'><span id="plist">Add to Playlist<span></button>   
+             <button class="btn btn-success" onClick= 'addtofavourites()'><span id="fav">favourite<span></button>
+            <?php
+$query="SELECT * 
+FROM  `playlists` 
+WHERE username =  '$username'
+LIMIT 0 , 30";
+  $plist = mysql_query($query) or die ("Failed to load friends");
+     // echo "<select name='playlistlist' id='list' onChange='addtoplaylist(this.value)'>"; 
+     echo "<select name='playlistlist' id='list'>";
+    echo "<option value='none'>choose playlist</option>";
+    while($result=mysql_fetch_assoc($plist))
+    {
+      echo "<option value=".$result['pid'].">".$result['pname']."</option>";
+
+    }
+    echo "</select>";
+    
+
+  
+  ?>
+              </select>  <h4 id="listresult"> </h4>   			
       			</div>
             <div class="col-md-2 col-md-offset-2">
               <label>Rating</label>

@@ -4,7 +4,6 @@ include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
 
-
  ?>
 <!DOCTYPE html>
 
@@ -47,7 +46,7 @@ display:none;
 
   </head>
 
-  <body onload="checksession()">
+  <body>
     <div class="navbar  navbar-fixed-top" role="navigation">
 
       <div class="container-fluid">
@@ -89,9 +88,8 @@ display:none;
             <li><a href="mymedia.php">My Media</a></li>
             <li><a href="messages.php">Messages</a></li>
             <li><a href="friends.php">Friends</a></li>
-           <li><a href="channel.php?channelname=<?php echo $username;?>" >MY Channel</a></li>
+            <li><a href="channel.php?channelname=<?php echo $username;?>" >MY Channel</a></li>
             <li><a href="subscribtions.php">subscribtions</a></li>
-            <li><a href="displayfavourites.php">favourites</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li class="active"><a href="">Categories</a></li>
@@ -104,13 +102,16 @@ display:none;
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-        <h1 class="page-header">Most Viewed</h1>
+        <h1 class="page-header">MY Subscribtions</h1>
         <div class="row placeholders">
         <?php
 
 
 
-        $query = "SELECT * from views natural join media order by views desc limit 0,4 "; 
+        $query = "SELECT * 
+FROM subscribe
+WHERE susername =  '$username'
+LIMIT 0 , 30"; 
         $result = mysql_query( $query );
         if (!$result)
         {
@@ -120,41 +121,18 @@ display:none;
         {
           ?>
           
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
-              <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
-            </div>
+            
+              
+              <h2><a href="channel.php?channelname=<?php echo $result_row['username'];?>"> Channel by <?php echo $result_row['username'];?></a></h2>
+              
+            
         <?php
         }
         ?>
       </div>
-
-      <h1 class="page-header">Recent Uploads</h1>
-        <div class="row placeholders">
-        <?php
-
-
-
-        $query = "SELECT * from upload natural join media order by uploadtime desc limit 0,4"; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
-        }
-        while ($result_row = mysql_fetch_assoc($result))
-        {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
-              <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
-            </div>
-        <?php
-        }
-        ?>
+        
       </div>
+
 
     </div> <!-- /container -->
 
@@ -162,12 +140,6 @@ display:none;
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript">
-    function checksession()
-    {
-      if(!<?php if(isset($_SESSION['u'])) echo 1; else echo 0; ?>)
-      //document.getElementById("sidebar").style.display="none";
-    }
-    </script>
+   
   </body>
 </html>
