@@ -31,22 +31,6 @@ session_start();
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-function playlistfunc()
-{
-
-var xmlhttp=new XMLHttpRequest();
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("mainframe").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","allplaylist.php",true);
-xmlhttp.send();
-}
-</script>
   </head>
 
   <body>
@@ -110,17 +94,30 @@ xmlhttp.send();
     		</div>
     		<div class="form-group">
     			<label for="uploadDescription">Keywords</label>
-    			<input type="text" class="form-control" name="keywords" required style="width:30%">
+    			<input type="text" class="form-control" name="keyword" required style="width:30%">
     		</div>
         <div class="form-group">
-          <label for="uploadFile">Thumbnail</label>
-          <input type="file" id="uploadFile">
-        <p class="help-block">Choose thumbnail</p>
+          <label>Category</label>
+          <select class="form-control" name="category" required style="width:20%">
+          <option value="music">Music</option>
+          <option value="sports">Sports</option>
+          <option value="movies">Movies</option>
+          <option value="kids">Kids</option>
+          <option value="action">Action</option>
+          <option value="education">Education</option>
+          </select>
         </div>
+        <div class="form-group">
+          <label>Permission</label>
+          <select class="form-control" name="permission" required style="width:15%">
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </div>
+
     		<div class="form-group">
     			<label for="uploadFile">File input</label>
-    			<input type="file" id="uploadFile">
-				<p class="help-block">Each file limit 10M</p>
+    			<input type="file" id="uploadFile" name="file" style="padding-top:5px">
+				<p class="help-block">Each file limit 50M</p>
   			</div>
   			<button type="submit" class="btn btn-default" name="submit" value="Upload">Upload</button>
   		</form>

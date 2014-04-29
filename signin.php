@@ -2,7 +2,6 @@
 session_start();
 $username="";
 $login_error="";
-
 include "function.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -103,6 +102,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <a class="btn btn-link btn-lg" href="/metube/register.php" role="button">Register</a>
 
         <p class="text-danger"><?php echo $login_error; ?></p>
+        <p class="text-info"><?php if(isset($_GET['id']))
+{
+  echo "Registration Sucessfull";
+}?></p>
+
       </form>
       </div> <!-- /container -->
 

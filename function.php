@@ -1,10 +1,9 @@
 <?php
 include "sql.php";
 
-function register($username,$password,$email)
+function register($username,$password,$email,$firstname,$lastname,$sex,$dob)
 {
-	$query="insert into account (username,password,email) values ('$username','$password','$email')";
-	//echo $query;
+	$query="insert into account (username,password,email,firstname,lastname,sex,dob) values ('$username','$password','$email','$firstname','$lastname','$sex','$dob')";
 	$a=mysql_query($query);
 
 }

@@ -5,7 +5,7 @@ include_once "sql.php";
 $username=$_SESSION['username'];
 
 if(isset($_GET['id'])) {
-  $query = "SELECT * FROM media WHERE mediaid='".$_GET['id']."'";
+  $query = "SELECT * FROM media natural join account WHERE mediaid='".$_GET['id']."'";
   $result = mysql_query( $query );
   $result_row = mysql_fetch_assoc($result);
   $filename=$result_row['filename'];
@@ -16,6 +16,20 @@ if(isset($_GET['id'])) {
   $description=$result_row['description'];
 }
 
+      $rating=0;  
+      $acid= $_SESSION['accid'];
+  $ratequery = "SELECT AVG(rating) AS score FROM mediarating WHERE mediaid='".$_GET['id']."'"." and accid=$acid" ;
+  $rateresult = mysql_query( $ratequery );
+  if(mysql_num_rows($rateresult)==0)
+  {
+    $ratequery = "INSERT INTO mediarating values($acid, '".$_GET['id']."','0')";
+    mysql_query($ratequery);
+  }
+  else
+  {
+    $rateresult_row = mysql_fetch_assoc($likeresult);
+    $ratescore= $rateresult_row['score'];
+  }
 
   $viewnumber=0;	
   $likequery = "SELECT * FROM likes WHERE mediaid='".$_GET['id']."'";
@@ -79,6 +93,23 @@ if(isset($_GET['id'])) {
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+function postcomment(str)
+{
+
+var xmlhttp=new XMLHttpRequest();
+var com=String(document.getElementById("comment").value);
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("comment1").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("POST","comment1.php?id="+str+"&com1="+com,true);
+xmlhttp.send();
+}
+</script>
 </head>
 
  <body>
@@ -131,7 +162,7 @@ if(isset($_GET['id'])) {
       		</div>
       		
       		<div class="row">
-      			<div class="col-md-6">
+            .      			<div class="col-md-6">
       			<p>Uploaded by <span style="font-weight:bold;font-size:120%;"><a href=""><?php echo $uploader;?></a></span></p>
       			<button class="btn btn-danger">Subscribe</button>
       			<button class="btn btn-info">Add to Playlist</button>      			
@@ -163,7 +194,7 @@ if(isset($_GET['id'])) {
       		
 
       		<div class="row"> <!--comments-->
-      			<div class="col-md-12">
+      			<div class="col-md-12" name="comment1">
       				<h4>Comments</h4>
       				<hr>
       			<?php  $query1 = "SELECT * FROM  `comments` NATURAL JOIN `account` WHERE mediaid = ". $_GET['id'] ." ORDER BY TIME DESC LIMIT 0 , 30"; 
@@ -185,15 +216,15 @@ if(isset($_GET['id'])) {
       		<div class="row">
       			<div class="well"> <!-- the comment box -->
       				<h4>Leave a Comment:</h4>
-      				<form role="form" id="comment" >
+      				
       					<div class="form-group">
       						<textarea class="form-control" rows="3" name="comment"></textarea>
       					</div>
-      					<input type="hidden" name="mediaid" value="<?php echo $_GET['id'];?>">
-      					<button type="submit" class="btn btn-primary" id="Cbutton">Submit</button>
-      				</form>
-      			</div>
-      		</div> <!--comment box-->
+      					
+      					<button type="button" class="btn btn-primary" onclick="postcomment(<?php echo $_GET['id']; ?>)" id="Cbutton">Submit</button>
+      		
+      			</div
+                  		</div> <!--comment box-->
 
 
 
@@ -215,7 +246,7 @@ if(isset($_GET['id'])) {
 	$(document).ready(function(){
 		$('audio,video').mediaelementplayer();
 		
-		$("#comment").submit(function(){
+		$("#commentssssss").submit(function(){
 			event.preventDefault();
 			var values = $(this).serialize();
 			$.ajax({

@@ -3,6 +3,7 @@ session_start();
 include_once "function.php";
 include_once "sql.php";
 $username=$_SESSION['username'];
+$sender=$_GET['sender'];
 
 
  ?>
@@ -34,16 +35,6 @@ $username=$_SESSION['username'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
-
-<style type="text/css"> 
-#panel
-{
-display:none;
-}
-</style>
-
-
 
   </head>
 
@@ -103,57 +94,17 @@ display:none;
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
-        <h1 class="page-header">Most Viewed</h1>
-        <div class="row placeholders">
-        <?php
+        <h1 class="page-header">Reply</h1>
+        <h3>From: <?php echo $username; ?></h3>
+        <h3>To: <?php echo $sender; ?></h3>
+        <form action="messageprocess.php" method="get">
+          <input type="hidden" name="to" value="<?php echo $sender; ?>">
+          <textarea class="form-control" rows="5" name="message" style="width:60%"></textarea>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </form>
 
 
-
-        $query = "SELECT * from views natural join media order by views desc limit 0,4 "; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
-        }
-        while ($result_row = mysql_fetch_assoc($result))
-        {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
-              <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
-            </div>
-        <?php
-        }
-        ?>
-      </div>
-
-      <h1 class="page-header">Recent Uploads</h1>
-        <div class="row placeholders">
-        <?php
-
-
-
-        $query = "SELECT * from upload natural join media order by uploadtime desc limit 0,4"; 
-        $result = mysql_query( $query );
-        if (!$result)
-        {
-          die ("Could not query the media table in the database: <br />". mysql_error());
-        }
-        while ($result_row = mysql_fetch_assoc($result))
-        {
-          ?>
-          
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="<?php echo $result_row['thumbnailpath'];?>" class="img-responsive" alt="Image" width="200px" height="200px" >
-              <h4><a href="media.php?id=<?php echo $result_row['mediaid'];?>"><?php echo $result_row['title'];?></a></h4>
-              <span class="text-muted"><a href="<?php echo $result_row['title'].$result_row['title'];?>" target="_blank" onclick="javascript:saveDownload(<?php echo $result_row['mediaid'];?>);">Download</a></span>
-            </div>
-        <?php
-        }
-        ?>
-      </div>
+        
 
     </div> <!-- /container -->
 

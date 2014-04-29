@@ -100,7 +100,8 @@ xmlhttp.send();
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
         <h1 class="page-header">Messages</h1>
         <div id="table">
-        <button class="btn btn-default" id="cButton">Compose</button></br>
+        <button class="btn btn-default" onclick="javascript:window.location = 'compose.php';">Compose</button></br>
+        
           <table class="table">
             <tr>
               <th width=20%>From</th>
@@ -122,6 +123,7 @@ xmlhttp.send();
             <td><?php echo $result_row['sender'];?></td>
             <td><?php echo $result_row['time'];?></td>
             <td><?php echo $result_row['message'];?></td>
+            <td><a href="reply.php?sender=<?php echo $result_row['sender']; ?>"><button class="btn-sm btn-success">Reply</button></a></td>
           </tr>
 
         <?php

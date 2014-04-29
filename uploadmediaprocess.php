@@ -9,7 +9,10 @@ include_once "sql.php";
 *******************************************************/
 $username=$_SESSION['username'];
 $title=$_POST['title'];
-$keywoards=$_POST['keywoards'];
+$keyword=$_POST['keyword'];
+$description=$_POST['description'];
+$permission=$_POST['permission'];
+$category=$_POST['category'];
 
 
 //Create Directory if doesn't exist
@@ -40,16 +43,56 @@ if(!file_exists($dirfile))
 				else /*Successfully upload file*/
 				{
 					//insert into media table
-					$insert = "insert into media(
-							  mediaid, filename, type, title, keywoards, filepath, username)".
-							  "values(NULL, '". urlencode($_FILES["file"]["name"])."', '".$_FILES["file"]["type"]."', '$title', '$keywoards','$dirfile','$username')";
+					$type=$_FILES["file"]["type"];
+					echo $_FILES["file"]["type"];
+					echo $_FILES["file"]["name"];
+					if(stripos($type,"video")!==false || stripos($type,"application")!==false)
+					{
+						$thumbnailpath="image/video.jpg";
+						echo $thumbnailpath;
+
+					}
+					else if(stripos($type,"audio")!==false)
+					{
+						$thumbnailpath="image/audio.jpg";
+					
+					}
+
+					else if (stripos($type,"image")!==false)
+					{
+						$thumbnailpath=$dirfile.$_FILES["file"]["name"];
+						echo $thumbnailpath;
+
+						
+					}
+
+
+					$insert="INSERT INTO `media`(`filename`, `type`, `title`, `filepath`, `username`, `thumbnailpath`, `description`, `category`, `permission`) VALUES 
+					('". urlencode($_FILES["file"]["name"])."', '".$_FILES["file"]["type"]."','$title','$dirfile','$username','$thumbnailpath','$description','$category','$permission')";
 					$queryresult = mysql_query($insert)
 						  or die("Insert into Media error in media_upload_process.php " .mysql_error());
 					$result="0";
-					
 
 					$mediaid = mysql_insert_id();
-					//insert into upload table
+
+					$ktypes=array();
+					$search=$keyword;
+         			$s1 = str_replace("'", '', $search);
+         			$s2 = preg_replace('/[^a-zA-Z0-9" "\']/', ' ', $s1);
+         			$s2 = preg_replace( "/\s+/", " ", $s2 );
+         			$sTerms = strip_tags($s2);
+    				$searchTermDB = mysql_real_escape_string($sTerms);
+    				$ktypes=explode(" ", $searchTermDB);
+    				foreach ($ktypes as &$value)
+    				{
+    					$query="INSERT into keywords (mediaid,keyword) values('$mediaid','$value')";
+    					mysql_query($query);
+    				}
+
+
+
+
+					
 					$insertUpload="insert into upload(uploadid,username,mediaid) values(NULL,'$username','$mediaid')";
 					$queryresult = mysql_query($insertUpload)
 						  or die("Insert into view error in media_upload_process.php " .mysql_error());
