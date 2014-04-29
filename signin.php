@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $_SESSION['accid']=$row['accid']; //Set the $_SESSION['accid']
 
 
-        header('Location: homex.php');
+        header('Location: index.php');
       }
 }
 ?>

@@ -2,7 +2,16 @@
 session_start();
 include_once "function.php";
 include_once "sql.php";
-$username=$_SESSION['username'];
+if(!isset($_SESSION['username']))
+{
+  $firstname="Guest";
+  header('location:index.php');
+}
+else
+{
+ $username=$_SESSION['username'];
+ $firstname=get_firstname($username);
+}
  ?>
 <!DOCTYPE html>
 
@@ -53,7 +62,8 @@ function delete_media(id)
   </head>
 
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar  navbar-fixed-top" role="navigation" style="background:white">
+
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -62,17 +72,39 @@ function delete_media(id)
             <span class="icon-bar"></span>
             
           </button>
-          <a class="navbar-brand" href="/metube/homex.php">MeTube - All Media.One Source</a>
+          <a class="navbar-brand" href="/metube/index.php">MeTube</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="profile.php">Hello,<?php echo get_firstname($username); ?></a></li>
-            <li><a href="uploadmedia.php">Upload</a></li>
+            <li><a href="profile.php">Hello,<?php echo $firstname; ?></a></li>
+            <li ><a href="uploadmedia.php" id="upload">Upload</a></li>
             <li><a href="signout.php">Sign out</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
+
+          <form class="navbar-form navbar-left" role="search" method=get action="searchmedia.php" style="position:relative;left:100px">
+            <div class="form-group" >
+              <input type="text" class="form-control" name="search" placeholder="Videos,images.." style="width:360px;">
+            </div>
+            <button type="submit" class="btn btn-default"  style="position:relative;left:-8px;border-top-left-radius:0;border-bottom-left-radius:0;"><span class="glyphicon glyphicon-search"></span> Search</button>
+            <div class="radio">
+              <label>
+            <input type="radio" name="search1" value="title"> Title
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+            <input type="radio" name="search1" value="keyword" checked> Keywords
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+            <input type="radio" name="search1" value="category"> Category
+              </label>
+            </div>
           </form>
+          <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="javascript:wordcloud()">Word Cloud</button>
+
+          
         </div>
       </div>
     </div>
@@ -80,23 +112,29 @@ function delete_media(id)
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="homex.php">Home</a></li>
+            <li class="active"><a href="index.php">Home</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <!--<li><button type="button" onclick="playlistfunc()">playlists</button></li>-->
             <li><a href="mymedia.php">My Media</a></li>
+            <li><a href="allplaylist.php">Playlists</a></li>            
             <li><a href="messages.php">Messages</a></li>
-            <li><a href="channels.php">Channels</a></li>
-            <li><a href="playlists.php">Playlists</a></li>
+            <li><a href="friends.php">Friends</a></li>
+            <li><a href="channel.php?channelname=<?php echo $username;?>">My Channel</a></li>
+            <li><a href="subscribtions.php">Subscribtions</a></li>
+            <li><a href="displayfavourites.php">Favourites</a></li>
+            <li><a href="block.php">Block List</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
+            <li class="active"><a href="">Categories</a></li>
+            <li><a href="searchmedia.php?search=music&search1=category">Music</a></li>
+            <li><a href="searchmedia.php?search=sports&search1=category">Sports</a></li>
+            <li><a href="searchmedia.php?search=movies&search1=category">Movies</a></li>
+            <li><a href="searchmedia.php?search=kids&search1=category">Kids</a></li> 
+            <li><a href="searchmedia.php?search=action&search1=category">Action</a></li>
+            <li><a href="searchmedia.php?search=education&search1=category">Education</a></li>
           </ul>
+
         </div>
       
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="mainframe"> <!--Body Container-->
